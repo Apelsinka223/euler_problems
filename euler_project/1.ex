@@ -1,11 +1,11 @@
-
-sum = Enum.reduce(0..999, fn (a, sum) ->
-        if (rem(a, 3) == 0 || rem(a, 5) == 0) do
-            a + sum
-        else
-            sum
-        end
+Enum.reduce(0..999, fn
+    a, sum when (rem(a, 3) == 0 or rem(a, 5) == 0) -> a + sum
+    _, sum -> sum
     end
 )
-IO.puts sum
+|> IO.puts
+
+Stream.filter(0..999, &(rem(&1, 3) == 0 or rem(&1, 5) == 0))
+|> Enum.sum
+|> IO.puts
 
