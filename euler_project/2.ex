@@ -4,6 +4,28 @@
 #
 #By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
 
+defmodule PalindromeMultiple do
+  def summary(number), do: summary(1, 1, 2, number)
+  def summary(_, b, sum, number) when b > number, do: IO.puts sum
+  def summary(a, b, sum, number)  when rem(b, 2) == 0, do: summary(a + b, a, sum + b, number)
+  def summary(a, b, sum, number), do: summary(a + b, a, sum, number)
+end
+time = :os.system_time(:micro_seconds)
+PalindromeMultiple.summary(4000000)
+IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
+
+time = :os.system_time(:micro_seconds)
+Stream.unfold({1, 1, 2}, fn
+        {_, b, _} when b > 4000000 -> nil
+        {a, b, sum} when rem(b, 2) == 0 -> {sum + b, {a + b, a, sum + b}}
+        {a, b, sum} -> {sum, {a + b, a, sum}}
+        _ -> nil
+    end
+)
+|> Enum.at(-1)
+|> IO.puts
+IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
+
 time = :os.system_time(:micro_seconds)
 Stream.unfold({1, 1}, fn
         {a, b} when a < 4000000 -> {a, {b, a + b}}
