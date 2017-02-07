@@ -4,14 +4,25 @@
 #
 #By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
 
-defmodule PalindromeMultiple do
+time = :os.system_time(:micro_seconds)
+Stream.unfold({1, 1}, fn
+        {a, b} when a < 4000000 -> {a, {b, a + b}}
+        _ -> nil
+    end
+)
+|> Stream.filter(&(rem(&1, 2) == 0))
+|> Enum.sum
+|> IO.inspect
+IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
+
+defmodule FibonacciEvenSum do
   def summary(number), do: summary(1, 1, 2, number)
   def summary(_, b, sum, number) when b > number, do: IO.puts sum
   def summary(a, b, sum, number)  when rem(b, 2) == 0, do: summary(a + b, a, sum + b, number)
   def summary(a, b, sum, number), do: summary(a + b, a, sum, number)
 end
 time = :os.system_time(:micro_seconds)
-PalindromeMultiple.summary(4000000)
+FibonacciEvenSum.summary(4000000)
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
 
 time = :os.system_time(:micro_seconds)
@@ -26,13 +37,13 @@ Stream.unfold({1, 1, 2}, fn
 |> IO.puts
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
 
-time = :os.system_time(:micro_seconds)
-Stream.unfold({1, 1}, fn
-        {a, b} when a < 4000000 -> {a, {b, a + b}}
-        _ -> nil
-    end
-)
-|> Stream.filter(&(rem(&1, 2) == 0))
-|> Enum.sum
-|> IO.inspect
-IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
+defmodule FibonacciEvenSum do
+  use ExActor
+
+  defcall next(x), state: state, do: reply(state + x, x)
+
+  def fib(n) do
+    {:ok, act} = Sample.start(1)
+    Stream.iterate(0, fn(x) -> Sample.next(act, x) end) |> Enum.take(n)
+  end
+end
