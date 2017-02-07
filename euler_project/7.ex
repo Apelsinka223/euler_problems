@@ -19,7 +19,7 @@ time = :os.system_time(:micro_seconds)
 Stream.unfold({[], 2},
     fn {list, a}->
       if (not Enum.any?(list, &(rem(a, &1) == 0))) do
-        {a, {[a] ++ list, a + 1}}
+        {a, {list ++ [a], a + 1}}
       else
         {nil,{list, a + 1}}
       end
