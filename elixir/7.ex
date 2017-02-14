@@ -16,8 +16,9 @@ Prime.at(10001)
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
 
 time = :os.system_time(:micro_seconds)
-Stream.unfold({[], 2},
-    fn {list, a}->
+IO.puts :timer.tc(fn ->
+    Stream.unfold({[], 2},
+    fn {list, a} ->
       if (not Enum.any?(list, &(rem(a, &1) == 0))) do
         {a, {list ++ [a], a + 1}}
       else
@@ -28,5 +29,8 @@ end)
 |> Stream.reject(&(!&1))
 |> Enum.at(10000)
 |> IO.inspect
+end)
+|> elem(0)
+|> IO.puts
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
 
