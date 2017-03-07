@@ -16,3 +16,14 @@ time = :os.system_time(:micro_seconds)
 )
 |> IO.puts
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
+
+time = :os.system_time(:micro_seconds)
+:math.pow(Enum.sum(1..100), 2)
+|> Kernel.-(
+    1..100
+    |> Enum.map(&Task.async(fn -> (:math.pow(&1, 2)) end))
+    |> Enum.map(&Task.await/1)
+    |> Enum.sum
+)
+|> IO.puts
+IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
