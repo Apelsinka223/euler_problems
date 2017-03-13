@@ -5,7 +5,7 @@
 number = 600851475143
 
 defmodule LargestPrimeFactor do
-    def factor(n, i, res), do: factor(n, i, res, n)
+    def factor(n), do: factor(n, 2, 0, n)
 
     def factor(n, i, res, number) when n == 1 or i >= div(number, 2), do:
         IO.puts res
@@ -18,5 +18,5 @@ defmodule LargestPrimeFactor do
 end
 
 time = :os.system_time(:micro_seconds)
-LargestPrimeFactor.factor(number, 2, 0)
+LargestPrimeFactor.factor(number)
 IO.puts 'time: #{ (:os.system_time(:micro_seconds) - time) / 1000000} seconds'
