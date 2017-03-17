@@ -9,7 +9,7 @@ Enum.reduce(2..20, {[], 1}, fn
             factor, a when rem(a, factor) == 0 -> div(a, factor)
             _, a -> a
         end)
-        {list ++ [factor], res * factor}
+        {[factor | list], res * factor}
     _, {list, res} -> {list, res}
     end)
 |>  elem(1)

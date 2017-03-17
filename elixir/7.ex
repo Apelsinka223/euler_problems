@@ -4,7 +4,7 @@ defmodule Prime do
   def at(n, n, _, last, _), do:  IO.puts last
   def at(n, i, next, last, list) do
     if (not Enum.any?(list, &(rem(next, &1) == 0))) do
-      at(n, i + 1, next + 1, next, list ++ [next])
+      at(n, i + 1, next + 1, next, [next | list])
     else
       at(n, i, next + 1, last, list)
     end
@@ -20,7 +20,7 @@ IO.puts :timer.tc(fn ->
     Stream.unfold({[], 2},
     fn {list, a} ->
       if (not Enum.any?(list, &(rem(a, &1) == 0))) do
-        {a, {list ++ [a], a + 1}}
+        {a, {[a | list], a + 1}}
       else
         {nil,{list, a + 1}}
       end
